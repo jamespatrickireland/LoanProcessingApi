@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using LoanProcessingApi.DTOs;
+using LoanProcessingApi.Models;
 
 namespace LoanProcessingApi.Controllers
 {
@@ -24,7 +25,18 @@ namespace LoanProcessingApi.Controllers
         [HttpPost("Create")]
         public IActionResult CreateApplication(CreateApplicationRequest req)
         {
+            var app = MapToApplication(req);
             return Ok();
+        }
+
+        private Application MapToApplication(CreateApplicationRequest req)
+        {
+            return new Application()
+            {
+                RequestedLoanAmount = req.RequestedLoanAmount,
+                BorrowerAddress = req.BorrowerAddress,
+                BorrowerName = req.BorrowerName
+            };
         }
     }
 }
