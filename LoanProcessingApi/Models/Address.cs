@@ -1,10 +1,16 @@
-﻿namespace LoanProcessingApi.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace LoanProcessingApi.Models
 {
     public class Address
     {
-        public string Street { get; set; }
-        public string City { get; set; }
-        public string State { get; set; }
-        public string Zip { get;  set; }
+        [Required]
+        public required string Street { get; set; }
+        [Required]
+        public required string City { get; set; }
+        [Required]
+        public required string State { get; set; }
+        [Required]
+        public required string Zip { get;  set; }
     }
 }
