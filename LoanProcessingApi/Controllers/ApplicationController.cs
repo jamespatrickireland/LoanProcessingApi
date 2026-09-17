@@ -21,7 +21,7 @@ namespace LoanProcessingApi.Controllers
             return "LoanProcessingApi is running";
         }
 
-        [HttpPost("CreateApplication")]
+        [HttpPost("Create")]
         public IActionResult CreateApplication(CreateApplicationRequest req)
         {
             return Ok();
