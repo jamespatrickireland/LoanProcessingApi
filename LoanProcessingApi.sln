@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.37614.0 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoanProcessingApi", "LoanProcessingApi\LoanProcessingApi.csproj", "{E9AC97BA-A15C-427C-8BD0-C388E3DA71E9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E9AC97BA-A15C-427C-8BD0-C388E3DA71E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9AC97BA-A15C-427C-8BD0-C388E3DA71E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9AC97BA-A15C-427C-8BD0-C388E3DA71E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9AC97BA-A15C-427C-8BD0-C388E3DA71E9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C60082EA-B727-4686-9991-6D775D6879BB}
+	EndGlobalSection
+EndGlobal
