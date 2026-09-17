@@ -2,8 +2,9 @@
 {
     public class Address
     {
-        string Street { get; set; }
-        string City { get; set; }
-        string Zip { get;  set; }
+        public string Street { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
+        public string Zip { get;  set; }
     }
 }

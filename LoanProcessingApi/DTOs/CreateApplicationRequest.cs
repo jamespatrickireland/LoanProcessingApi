@@ -6,11 +6,11 @@ namespace LoanProcessingApi.DTOs
     public class CreateApplicationRequest
     {
         [Required]
-        string BorrowerName { get; set; }
+        public string BorrowerName { get; set; }
         [Required]
-        Address BorrowerAddress { get; set; }
+        public Address BorrowerAddress { get; set; }
         [Required]
-        decimal RequestedLoanAmount { get; set; }
+        public decimal RequestedLoanAmount { get; set; }
 
 
     }
