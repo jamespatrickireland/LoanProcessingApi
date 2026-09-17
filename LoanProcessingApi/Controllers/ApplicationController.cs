@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using LoanProcessingApi.DTOs;
 using LoanProcessingApi.Models;
+using LoanProcessingApi.Services;
 
 namespace LoanProcessingApi.Controllers
 {
@@ -10,9 +11,11 @@ namespace LoanProcessingApi.Controllers
     {
        
         private readonly ILogger<ApplicationController> _logger;
+        private readonly LoanDecisionService _loanDecision;
 
-        public ApplicationController(ILogger<ApplicationController> logger)
+        public ApplicationController(LoanDecisionService loanDec,ILogger<ApplicationController> logger)
         {
+            _loanDecision = loanDec;
             _logger = logger;
         }
 
@@ -26,7 +29,8 @@ namespace LoanProcessingApi.Controllers
         public IActionResult CreateApplication(CreateApplicationRequest req)
         {
             var app = MapToApplication(req);
-            return Ok();
+            var dec = _loanDecision.Evaluate(app);
+            return Ok(dec);
         }
 
         private Application MapToApplication(CreateApplicationRequest req)

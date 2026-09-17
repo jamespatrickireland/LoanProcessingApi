@@ -8,8 +8,8 @@ namespace LoanProcessingApi.Models
         public ApplicationStatus Status { get; set; }
         public decimal InterestRate { get; set; }
         public DateTime CreatedDate { get; set; }
-        public string BorrowerName { get; set; }
-        public Address BorrowerAddress { get; set; }
+        public required string BorrowerName { get; set; }
+        public Address? BorrowerAddress { get; set; }
         public decimal RequestedLoanAmount { get; set; }
     }
 }
