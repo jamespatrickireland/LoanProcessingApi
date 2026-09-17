@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using LoanProcessingApi.DTOs;
 
 namespace LoanProcessingApi.Controllers
 {
@@ -14,10 +15,16 @@ namespace LoanProcessingApi.Controllers
             _logger = logger;
         }
 
-        [HttpGet("test")]
-        public string test()
+        [HttpGet("Test")]
+        public string Test()
         {
             return "LoanProcessingApi is running";
+        }
+
+        [HttpPost("CreateApplication")]
+        public IActionResult CreateApplication(CreateApplicationRequest req)
+        {
+            return Ok();
         }
     }
 }

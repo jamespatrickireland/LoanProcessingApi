@@ -1,6 +1,0 @@
-@LoanProcessingApi_HostAddress = http://localhost:5223
-
-GET {{LoanProcessingApi_HostAddress}}/Application/test
-Accept: application/json
-
-###

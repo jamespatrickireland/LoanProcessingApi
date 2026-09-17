@@ -9,8 +9,7 @@ namespace LoanProcessingApi.DTOs
         public required string BorrowerName { get; set; }
         [Required]
         public required Address BorrowerAddress { get; set; }
-        [Required]
-        public required decimal RequestedLoanAmount { get; set; }
+        public decimal RequestedLoanAmount { get; set; }
 
 
     }
