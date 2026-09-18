@@ -47,8 +47,12 @@ namespace LoanProcessingApi.Controllers
         public async Task<IActionResult> GetApplicationById(int id)
         {
             var app = await _dbContext.Applications.FirstOrDefaultAsync(a => a.Id == id);
-
-            return Ok(app);
+            if(app == null)
+            {
+                return NotFound(id + " was not found");
+            }
+            var res = CreateResponse(app);
+            return Ok(res);
         }
 
         private Application MapToApplication(CreateApplicationRequest req)
