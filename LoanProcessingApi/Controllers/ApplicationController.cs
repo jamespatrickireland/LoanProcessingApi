@@ -2,6 +2,8 @@
 using LoanProcessingApi.DTOs;
 using LoanProcessingApi.Models;
 using LoanProcessingApi.Services;
+using LoanProcessingApi.Data;
+using System.Threading.Tasks;
 
 namespace LoanProcessingApi.Controllers
 {
@@ -12,9 +14,11 @@ namespace LoanProcessingApi.Controllers
        
         private readonly ILogger<ApplicationController> _logger;
         private readonly LoanDecisionService _loanDecision;
+        private readonly ApplicationDbContext _dbContext;
 
-        public ApplicationController(LoanDecisionService loanDec,ILogger<ApplicationController> logger)
+        public ApplicationController(LoanDecisionService loanDec,ApplicationDbContext dbContext,ILogger<ApplicationController> logger)
         {
+            _dbContext = dbContext;
             _loanDecision = loanDec;
             _logger = logger;
         }
@@ -26,17 +30,21 @@ namespace LoanProcessingApi.Controllers
         }
 
         [HttpPost("Create")]
-        public IActionResult CreateApplication(CreateApplicationRequest req)
+        public async Task<IActionResult> CreateApplication(CreateApplicationRequest req)
         {
             var app = MapToApplication(req);
             var dec = _loanDecision.Evaluate(app);
-            return Ok(CreateResponse(app,dec));
+            _dbContext.Applications.Add(app);
+            await _dbContext.SaveChangesAsync();
+
+            var res = CreateResponse(app, dec);
+            return Ok(res);
         }
 
         private Application MapToApplication(CreateApplicationRequest req)
         {
             return new Application()
-            {
+            { 
                 RequestedLoanAmount = req.RequestedLoanAmount,
                 BorrowerAddress = req.BorrowerAddress,
                 BorrowerName = req.BorrowerName,
@@ -48,6 +56,7 @@ namespace LoanProcessingApi.Controllers
         {
             return new ApplicationResponse()
             {
+                Id = app.Id,
                 RequestedLoanAmount = app.RequestedLoanAmount,
                 BorrowerAddress = app.BorrowerAddress,
                 BorrowerName = app.BorrowerName,
