@@ -30,7 +30,7 @@ namespace LoanProcessingApi.Controllers
         {
             var app = MapToApplication(req);
             var dec = _loanDecision.Evaluate(app);
-            return Ok(dec);
+            return Ok(CreateResponse(app,dec));
         }
 
         private Application MapToApplication(CreateApplicationRequest req)
@@ -39,7 +39,21 @@ namespace LoanProcessingApi.Controllers
             {
                 RequestedLoanAmount = req.RequestedLoanAmount,
                 BorrowerAddress = req.BorrowerAddress,
-                BorrowerName = req.BorrowerName
+                BorrowerName = req.BorrowerName,
+                CreatedDate = DateTime.UtcNow
+            };
+        }
+
+        private ApplicationResponse CreateResponse(Application app,LoanDecision dec)
+        {
+            return new ApplicationResponse()
+            {
+                RequestedLoanAmount = app.RequestedLoanAmount,
+                BorrowerAddress = app.BorrowerAddress,
+                BorrowerName = app.BorrowerName,
+                InterestRate = dec.InterestRate,
+                Status = dec.Status,
+                CreatedDate = app.CreatedDate,
             };
         }
     }
