@@ -10,5 +10,6 @@ namespace LoanProcessingApi.DTOs
         public string BorrowerName { get; set; }
         public Address BorrowerAddress { get; set; }
         public decimal RequestedLoanAmount { get; set; }
+        public string? DecisionReason { get; set; }
     }
 }

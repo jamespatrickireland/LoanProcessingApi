@@ -9,7 +9,8 @@ namespace LoanProcessingApi.Models
         public decimal InterestRate { get; set; }
         public DateTime CreatedDate { get; set; }
         public required string BorrowerName { get; set; }
-        public Address? BorrowerAddress { get; set; }
+        public Address BorrowerAddress { get; set; }
         public decimal RequestedLoanAmount { get; set; }
+        public string? DecisionReason { get; set; }
     }
 }

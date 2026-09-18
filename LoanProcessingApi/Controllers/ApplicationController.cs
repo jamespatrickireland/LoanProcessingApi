@@ -4,6 +4,7 @@ using LoanProcessingApi.Models;
 using LoanProcessingApi.Services;
 using LoanProcessingApi.Data;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace LoanProcessingApi.Controllers
 {
@@ -33,12 +34,21 @@ namespace LoanProcessingApi.Controllers
         public async Task<IActionResult> CreateApplication(CreateApplicationRequest req)
         {
             var app = MapToApplication(req);
-            var dec = _loanDecision.Evaluate(app);
+            _loanDecision.EvaluateApplication(app);
+
             _dbContext.Applications.Add(app);
             await _dbContext.SaveChangesAsync();
 
-            var res = CreateResponse(app, dec);
+            var res = CreateResponse(app);
             return Ok(res);
+        }
+
+        [HttpGet("Get/{id}")]
+        public async Task<IActionResult> GetApplicationById(int id)
+        {
+            var app = await _dbContext.Applications.FirstOrDefaultAsync(a => a.Id == id);
+
+            return Ok(app);
         }
 
         private Application MapToApplication(CreateApplicationRequest req)
@@ -52,7 +62,7 @@ namespace LoanProcessingApi.Controllers
             };
         }
 
-        private ApplicationResponse CreateResponse(Application app,LoanDecision dec)
+        private ApplicationResponse CreateResponse(Application app)
         {
             return new ApplicationResponse()
             {
@@ -60,8 +70,9 @@ namespace LoanProcessingApi.Controllers
                 RequestedLoanAmount = app.RequestedLoanAmount,
                 BorrowerAddress = app.BorrowerAddress,
                 BorrowerName = app.BorrowerName,
-                InterestRate = dec.InterestRate,
-                Status = dec.Status,
+                InterestRate = app.InterestRate,
+                DecisionReason = app.DecisionReason,
+                Status = app.Status,
                 CreatedDate = app.CreatedDate,
             };
         }
