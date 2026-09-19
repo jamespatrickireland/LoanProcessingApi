@@ -15,12 +15,14 @@ namespace LoanProcessingApi.Controllers
        
         private readonly ILogger<ApplicationController> _logger;
         private readonly LoanDecisionService _loanDecision;
+        private readonly ApprovalLetterService _appLetter;
         private readonly ApplicationDbContext _dbContext;
 
-        public ApplicationController(LoanDecisionService loanDec,ApplicationDbContext dbContext,ILogger<ApplicationController> logger)
+        public ApplicationController(LoanDecisionService loanDec,ApprovalLetterService appLetter,ApplicationDbContext dbContext,ILogger<ApplicationController> logger)
         {
             _dbContext = dbContext;
             _loanDecision = loanDec;
+            _appLetter = appLetter;
             _logger = logger;
         }
 
@@ -53,6 +55,26 @@ namespace LoanProcessingApi.Controllers
             }
             var res = CreateResponse(app);
             return Ok(res);
+        }
+
+        [HttpPost("GenerateApprovalLetter/{id}")]
+        public async Task<IActionResult> GenerateApprovalLetter(int id)
+        {
+            var app = await _dbContext.Applications.FirstOrDefaultAsync(a => a.Id == id);
+            if(app == null)
+            {
+                return NotFound(id + " was not found");
+            }
+            else if(app.Status != ApplicationStatus.Approved)
+            {
+                return Conflict("This application was rejected.");
+            }
+            else
+            {
+                var generateLetterResult = _appLetter.GenerateLetter(app);
+                return Ok(generateLetterResult);
+            }
+            
         }
 
         private Application MapToApplication(CreateApplicationRequest req)
