@@ -51,7 +51,7 @@ namespace LoanProcessingApi.Controllers
             var app = await _dbContext.Applications.FirstOrDefaultAsync(a => a.Id == id);
             if(app == null)
             {
-                return NotFound(id + " was not found");
+                return StatusCode(404,id + " was not found");
             }
             var res = CreateResponse(app);
             return Ok(res);
@@ -63,16 +63,21 @@ namespace LoanProcessingApi.Controllers
             var app = await _dbContext.Applications.FirstOrDefaultAsync(a => a.Id == id);
             if(app == null)
             {
-                return NotFound(id + " was not found");
+                return StatusCode(404,id + " was not found");
             }
             else if(app.Status != ApplicationStatus.Approved)
             {
-                return Conflict("This application was rejected.");
+                return StatusCode(409,"This application was rejected.");
             }
             else
             {
-                var generateLetterResult = _appLetter.GenerateLetter(app);
-                return Ok(generateLetterResult);
+                var result = _appLetter.GenerateLetter(app);
+                if (!result.Success || result.PdfBytes == null)
+                {
+                    return StatusCode(500, result.ErrorMessage);
+                }
+
+                return File(result.PdfBytes,"application/pdf","ApprovalLetter.pdf");
             }
             
         }

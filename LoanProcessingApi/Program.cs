@@ -1,11 +1,12 @@
 using LoanProcessingApi.Data;
 using LoanProcessingApi.Services;
 using Microsoft.EntityFrameworkCore;
+using QuestPDF.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+QuestPDF.Settings.License = LicenseType.Evaluation;
 builder.Services.AddControllers();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(
