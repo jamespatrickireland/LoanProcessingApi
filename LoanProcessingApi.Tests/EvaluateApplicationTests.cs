@@ -29,10 +29,16 @@ namespace LoanProcessingApi.Tests
 
             // Assert
             Assert.Equal(ApplicationStatus.Rejected, app.Status);
+            Assert.Equal("Loan amount must be at least 10000.", app.DecisionReason);
         }
 
-        [Fact]
-        public void EvaluateApplication_AmountBetween10000And25000_9_5Rate()
+        [Theory]
+        [InlineData(10000,9.5)]
+        [InlineData(24999,9.5)]
+        [InlineData(25000,8)]
+        [InlineData(49999, 8)]
+        [InlineData(50000, 6.5)]
+        public void EvaluateApplication_ApprovedBoundaries_ReturnExpectedRate(int requestedAmount,double expectedRate)
         {
             // Arrange
             var service = new LoanDecisionService();
@@ -46,64 +52,16 @@ namespace LoanProcessingApi.Tests
                     State = "CA",
                     Zip = "55555"
                 },
-                RequestedLoanAmount = 15000
+                RequestedLoanAmount = requestedAmount
             };
 
             // Act
             service.EvaluateApplication(app);
 
             // Assert
-            Assert.Equal(9.5m, app.InterestRate);
+            Assert.Equal(ApplicationStatus.Approved, app.Status);
+            Assert.Equal((decimal)expectedRate, app.InterestRate);
         }
 
-        [Fact]
-        public void EvaluateApplication_AmountBetween25000And50000_8Rate()
-        {
-            // Arrange
-            var service = new LoanDecisionService();
-            var app = new Application
-            {
-                BorrowerName = "Test User",
-                BorrowerAddress = new Address
-                {
-                    Street = "1 Main St",
-                    City = "Test City",
-                    State = "CA",
-                    Zip = "55555"
-                },
-                RequestedLoanAmount = 30000
-            };
-
-            // Act
-            service.EvaluateApplication(app);
-
-            // Assert
-            Assert.Equal(8m, app.InterestRate);
-        }
-
-        [Fact]
-        public void EvaluateApplication_AmountGreater50000_6_5Rate()
-        {
-            // Arrange
-            var service = new LoanDecisionService();
-            var app = new Application
-            {
-                BorrowerName = "Test User",
-                BorrowerAddress = new Address
-                {
-                    Street = "1 Main St",
-                    City = "Test City",
-                    State = "CA",
-                    Zip = "55555"
-                },
-                RequestedLoanAmount = 60000
-            };
-
-            // Act
-            service.EvaluateApplication(app);
-
-            // Assert
-            Assert.Equal(6.5m, app.InterestRate);
-        }
     }
 }
