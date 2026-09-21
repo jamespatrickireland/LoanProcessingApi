@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using LoanProcessingApi.Data;
 using LoanProcessingApi.DTOs;
 using LoanProcessingApi.Models;
 using LoanProcessingApi.Services;
-using LoanProcessingApi.Data;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace LoanProcessingApi.Controllers
 {
@@ -51,7 +52,7 @@ namespace LoanProcessingApi.Controllers
             var app = await _dbContext.Applications.FirstOrDefaultAsync(a => a.Id == id);
             if(app == null)
             {
-                return StatusCode(404,id + " was not found");
+                return NotFound(id + " was not found");
             }
             var res = CreateResponse(app);
             return Ok(res);
@@ -63,18 +64,18 @@ namespace LoanProcessingApi.Controllers
             var app = await _dbContext.Applications.FirstOrDefaultAsync(a => a.Id == id);
             if(app == null)
             {
-                return StatusCode(404,id + " was not found");
+                return NotFound(id + " was not found");
             }
             else if(app.Status != ApplicationStatus.Approved)
             {
-                return StatusCode(409,"This application was rejected.");
+                return Conflict("This application was rejected.");
             }
             else
             {
                 var result = _appLetter.GenerateLetter(app);
                 if (!result.Success || result.PdfBytes == null)
                 {
-                    return StatusCode(500, result.ErrorMessage);
+                    return StatusCode(500,result.ErrorMessage);
                 }
 
                 return File(result.PdfBytes,"application/pdf","ApprovalLetter.pdf");

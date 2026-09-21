@@ -25,8 +25,8 @@ namespace LoanProcessingApi.Services
 
                         text = app.BorrowerName + "\n"
                             + app.BorrowerAddress.Street + " " + app.BorrowerAddress.City + ", " + app.BorrowerAddress.State + " " + app.BorrowerAddress.Zip + "\n" + "\n"
-                            + app.RequestedLoanAmount.ToString() + "\n"
-                            + app.InterestRate.ToString();
+                            + app.RequestedLoanAmount.ToString("C2") + "\n"
+                            + app.InterestRate.ToString("0.00") + "%";
 
                         page.Header()
                             .Text("Loan Application")
@@ -43,6 +43,8 @@ namespace LoanProcessingApi.Services
 
                     });
                 }).GeneratePdf();
+                res.Success = true;
+                return res;
             }
             catch (Exception ex)
             {
@@ -50,10 +52,6 @@ namespace LoanProcessingApi.Services
                 res.Success = false;
                 return res;
             }
-            res.Success = true;
-            return res;
-
-
         }
     }
 }
