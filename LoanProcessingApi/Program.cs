@@ -10,7 +10,12 @@ QuestPDF.Settings.License = LicenseType.Evaluation;
 builder.Services.AddControllers();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection")));
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+    sqlOptions =>
+    {
+        sqlOptions.EnableRetryOnFailure();
+    }));
+
 builder.Services.AddSingleton<LoanDecisionService>();
 builder.Services.AddSingleton<ApprovalLetterService>();
 
