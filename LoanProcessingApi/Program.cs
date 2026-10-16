@@ -2,6 +2,7 @@ using LoanProcessingApi.Data;
 using LoanProcessingApi.Services;
 using Microsoft.EntityFrameworkCore;
 using QuestPDF.Infrastructure;
+using Azure.Monitor.OpenTelemetry.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     {
         sqlOptions.EnableRetryOnFailure();
     }));
+
+builder.Services
+    .AddOpenTelemetry()
+    .UseAzureMonitor();
 
 builder.Services.AddSingleton<LoanDecisionService>();
 builder.Services.AddSingleton<ApprovalLetterService>();

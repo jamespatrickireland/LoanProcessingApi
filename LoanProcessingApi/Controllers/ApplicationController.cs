@@ -33,6 +33,22 @@ namespace LoanProcessingApi.Controllers
             return "LoanProcessingApi is running";
         }
 
+        [HttpGet("AsyncTest")]
+        public async Task<IActionResult> AsyncTest()
+        {
+            await Task.Delay(1000);
+
+            return Ok("Finished");
+        }
+
+        [HttpGet("BlockingTest")]
+        public IActionResult BlockingTest()
+        {
+            Task.Delay(1000).Wait();
+
+            return Ok("Finished");
+        }
+
         [HttpPost("Create")]
         public async Task<IActionResult> CreateApplication(CreateApplicationRequest req)
         {
