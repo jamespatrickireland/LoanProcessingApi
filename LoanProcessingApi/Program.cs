@@ -17,9 +17,15 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
         sqlOptions.EnableRetryOnFailure();
     }));
 
-builder.Services
-    .AddOpenTelemetry()
-    .UseAzureMonitor();
+var appInsightsConnectionString =
+    builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"];
+
+var openTelemetry = builder.Services.AddOpenTelemetry();
+
+if (!string.IsNullOrWhiteSpace(appInsightsConnectionString))
+{
+    openTelemetry.UseAzureMonitor();
+}
 
 builder.Services.AddSingleton<LoanDecisionService>();
 builder.Services.AddSingleton<ApprovalLetterService>();
