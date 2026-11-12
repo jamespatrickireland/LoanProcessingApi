@@ -9,6 +9,19 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 QuestPDF.Settings.License = LicenseType.Evaluation;
 builder.Services.AddControllers();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("ReactDev",
+        policy =>
+        {
+            policy.WithOrigins(builder.Configuration
+                .GetSection("Cors:AllowedOrigins")
+                .Get<string[]>())
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+        });
+});
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection"),
@@ -21,6 +34,7 @@ var appInsightsConnectionString =
     builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"];
 
 var openTelemetry = builder.Services.AddOpenTelemetry();
+
 
 if (!string.IsNullOrWhiteSpace(appInsightsConnectionString))
 {
@@ -42,6 +56,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseCors("ReactDev");
 
 app.UseHttpsRedirection();
 
